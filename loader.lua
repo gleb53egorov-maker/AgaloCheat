@@ -1,5 +1,5 @@
 -- AgaloCheat v0.1 - Created by Kast13l
--- GitHub: https://github.com/Kast13l/AgaloCheat
+-- GitHub: https://github.com/gleb53egorov-maker/AgaloCheat
 
 local AgaloCheat = {
     Version = "0.1 (Beta)",
