@@ -1,315 +1,413 @@
--- AgaloCheat v3.0 - FPS Flick Edition
--- Created by Kast13l
+-- UNX FPS Flick Cheat
 -- Optimized for: [FPS] Flick
+-- Style: UNX Loader
 
-local AgaloCheat = {
-    Version = "3.0 (FPS Flick)",
-    Creator = "Kast13l"
+local UNX = {
+    Name = "UNX FPS Flick Cheat",
+    Version = "1.0",
+    Game = "[FPS] Flick"
 }
 
--- === ПЛАВАЮЩАЯ КНОПКА ===
-local function CreateFloatingButton()
-    local buttonGui = Instance.new("ScreenGui")
-    buttonGui.Name = "FloatingButton"
-    buttonGui.Parent = game:GetService("CoreGui")
+-- UNX Style Loader Animation
+local function UNXLoader()
+    local LoaderGui = Instance.new("ScreenGui")
+    LoaderGui.Name = "UNXLoader"
+    LoaderGui.Parent = game:GetService("CoreGui")
     
-    local mainButton = Instance.new("TextButton")
-    mainButton.Size = UDim2.new(0, 50, 0, 50)
-    mainButton.Position = UDim2.new(0, 20, 0.5, -25)
-    mainButton.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
-    mainButton.Text = "☰"
-    mainButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    mainButton.TextSize = 20
-    mainButton.BorderSizePixel = 0
-    mainButton.ZIndex = 10
-    mainButton.Parent = buttonGui
+    local MainFrame = Instance.new("Frame")
+    MainFrame.Size = UDim2.new(0, 400, 0, 200)
+    MainFrame.Position = UDim2.new(0.5, -200, 0.5, -100)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+    MainFrame.BorderSizePixel = 0
+    MainFrame.Parent = LoaderGui
     
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(1, 0)
-    corner.Parent = mainButton
+    local Corner = Instance.new("UICorner")
+    Corner.CornerRadius = UDim.new(0, 8)
+    Corner.Parent = MainFrame
     
-    return buttonGui, mainButton
+    -- UNX Logo/Title
+    local Title = Instance.new("TextLabel")
+    Title.Size = UDim2.new(1, 0, 0, 60)
+    Title.Position = UDim2.new(0, 0, 0, 20)
+    Title.BackgroundTransparency = 1
+    Title.Text = "UNX FPS FLICK"
+    Title.TextColor3 = Color3.fromRGB(0, 255, 255)
+    Title.TextSize = 28
+    Title.Font = Enum.Font.GothamBold
+    Title.Parent = MainFrame
+    
+    local SubTitle = Instance.new("TextLabel")
+    SubTitle.Size = UDim2.new(1, 0, 0, 30)
+    SubTitle.Position = UDim2.new(0, 0, 0, 60)
+    SubTitle.BackgroundTransparency = 1
+    SubTitle.Text = "Loading Cheat System..."
+    SubTitle.TextColor3 = Color3.fromRGB(200, 200, 200)
+    SubTitle.TextSize = 16
+    SubTitle.Font = Enum.Font.Gotham
+    SubTitle.Parent = MainFrame
+    
+    -- Progress Bar
+    local ProgressBg = Instance.new("Frame")
+    ProgressBg.Size = UDim2.new(0, 360, 0, 6)
+    ProgressBg.Position = UDim2.new(0.5, -180, 0.5, 10)
+    ProgressBg.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+    ProgressBg.BorderSizePixel = 0
+    ProgressBg.Parent = MainFrame
+    
+    local ProgressBar = Instance.new("Frame")
+    ProgressBar.Size = UDim2.new(0, 0, 1, 0)
+    ProgressBar.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+    ProgressBar.BorderSizePixel = 0
+    ProgressBar.Parent = ProgressBg
+    
+    local Status = Instance.new("TextLabel")
+    Status.Size = UDim2.new(1, 0, 0, 30)
+    Status.Position = UDim2.new(0, 0, 0, 140)
+    Status.BackgroundTransparency = 1
+    Status.Text = "Initializing..."
+    Status.TextColor3 = Color3.fromRGB(150, 150, 150)
+    Status.TextSize = 14
+    Status.Font = Enum.Font.Gotham
+    Status.Parent = MainFrame
+    
+    -- Loading steps
+    local Steps = {
+        "Loading Core Components...",
+        "Initializing AimBot System...",
+        "Setting Up ESP...",
+        "Configuring Visuals...",
+        "Preparing Interface...",
+        "Finalizing Setup..."
+    }
+    
+    coroutine.wrap(function()
+        for i, Step in ipairs(Steps) do
+            Status.Text = Step
+            ProgressBar:TweenSize(
+                UDim2.new(i / #Steps, 0, 1, 0),
+                Enum.EasingDirection.Out,
+                Enum.EasingStyle.Quad,
+                0.5,
+                true
+            )
+            wait(0.8)
+        end
+        
+        -- Fade out
+        for i = 1, 20 do
+            MainFrame.BackgroundTransparency = i / 20
+            wait(0.03)
+        end
+        
+        LoaderGui:Destroy()
+    end)()
+    
+    return LoaderGui
 end
 
--- === КОНФИГУРАЦИЯ ДЛЯ FPS FLICK ===
+-- UNX Style Configuration
 local Config = {
+    AimBot = {
+        Enabled = true,
+        Key = "MouseButton2",
+        Part = "Head",
+        FOV = 80,
+        Smoothness = 0.1,
+        Prediction = 0.12,
+        ShowFOV = true,
+        AutoShoot = false
+    },
+    
     ESP = {
         Enabled = true,
-        Boxes = true,
-        Names = true,
+        Box = true,
+        Name = true,
         Health = true,
-        Distance = true
+        Distance = true,
+        Weapon = true,
+        HealthBar = true,
+        Tracers = false
     },
+    
     Visuals = {
         NoFog = true,
-        FullBright = true
+        FullBright = true,
+        Crosshair = true
     },
+    
     Movement = {
         Speed = false,
         SpeedValue = 25,
-        Bhop = false,
-        JumpPower = 50
-    },
-    Combat = {
-        AimBot = false,
-        AimKey = "MouseButton2",
-        AimFOV = 50,
-        AimSmoothness = 0.4
-    },
-    Misc = {
-        Clock = true,
-        FPS = true
+        Bhop = false
     }
 }
 
--- === ПРОСТОЙ И ЭФФЕКТИВНЫЙ ESP ===
+-- UNX Style ESP for FPS Flick
 local function InitializeESP()
-    local players = game:GetService("Players")
-    local localPlayer = players.LocalPlayer
-    local camera = workspace.CurrentCamera
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+    local Camera = workspace.CurrentCamera
+    local RunService = game:GetService("RunService")
     
-    local espObjects = {}
+    local ESPObjects = {}
     
-    local function createESP(player)
-        if player == localPlayer then return end
+    local function CreateESP(Player)
+        if Player == LocalPlayer then return end
         
-        espObjects[player] = {
+        ESPObjects[Player] = {
             Box = Drawing.new("Square"),
             Name = Drawing.new("Text"),
             Health = Drawing.new("Text"),
-            Distance = Drawing.new("Text")
+            Distance = Drawing.new("Text"),
+            Weapon = Drawing.new("Text"),
+            HealthBar = Drawing.new("Square"),
+            HealthBarBg = Drawing.new("Square")
         }
         
-        local esp = espObjects[player]
+        local ESP = ESPObjects[Player]
         
-        -- Настройка стилей
-        esp.Box.Thickness = 2
-        esp.Box.Filled = false
+        -- UNX Style Settings
+        ESP.Box.Thickness = 2
+        ESP.Box.Filled = false
+        ESP.Box.Color = Color3.fromRGB(0, 255, 255)
         
-        esp.Name.Size = 14
-        esp.Name.Outline = true
-        esp.Name.OutlineColor = Color3.new(0, 0, 0)
+        ESP.Name.Size = 14
+        ESP.Name.Outline = true
+        ESP.Name.Color = Color3.fromRGB(255, 255, 255)
         
-        esp.Health.Size = 12
-        esp.Health.Outline = true
-        esp.Health.OutlineColor = Color3.new(0, 0, 0)
+        ESP.Health.Size = 12
+        ESP.Health.Outline = true
         
-        esp.Distance.Size = 12
-        esp.Distance.Outline = true
-        esp.Distance.OutlineColor = Color3.new(0, 0, 0)
+        ESP.Distance.Size = 12
+        ESP.Distance.Outline = true
+        
+        ESP.Weapon.Size = 12
+        ESP.Weapon.Outline = true
+        ESP.Weapon.Color = Color3.fromRGB(255, 255, 0)
+        
+        ESP.HealthBarBg.Filled = true
+        ESP.HealthBarBg.Color = Color3.new(0, 0, 0)
+        
+        ESP.HealthBar.Filled = true
     end
     
-    -- Быстрое обновление ESP
-    local lastUpdate = 0
-    game:GetService("RunService").RenderStepped:Connect(function()
-        local currentTime = tick()
-        if currentTime - lastUpdate < 0.03 then return end -- Ограничение FPS для ESP
-        lastUpdate = currentTime
-        
-        for player, esp in pairs(espObjects) do
-            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                local rootPart = player.Character.HumanoidRootPart
-                local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-                local head = player.Character:FindFirstChild("Head")
+    local function GetWeapon(Player)
+        if Player.Character then
+            local Tool = Player.Character:FindFirstChildOfClass("Tool")
+            if Tool then return Tool.Name end
+        end
+        return "Fists"
+    end
+    
+    -- High performance ESP
+    RunService.RenderStepped:Connect(function()
+        for Player, ESP in pairs(ESPObjects) do
+            if Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
+                local Root = Player.Character.HumanoidRootPart
+                local Humanoid = Player.Character:FindFirstChildOfClass("Humanoid")
+                local Head = Player.Character:FindFirstChild("Head")
                 
-                if rootPart and humanoid and humanoid.Health > 0 and head then
-                    local headPos, onScreen = camera:WorldToViewportPoint(head.Position)
+                if Root and Humanoid and Humanoid.Health > 0 and Head then
+                    local HeadPos, OnScreen = Camera:WorldToViewportPoint(Head.Position)
                     
-                    if onScreen then
-                        local distance = (rootPart.Position - camera.CFrame.Position).Magnitude
-                        local scale = math.clamp(1000 / distance, 0.4, 1.5)
+                    if OnScreen then
+                        local Distance = (Root.Position - Camera.CFrame.Position).Magnitude
+                        local Scale = math.clamp(1000 / Distance, 0.4, 1.5)
                         
-                        local boxHeight = 35 * scale
-                        local boxWidth = 18 * scale
+                        local Height = 35 * Scale
+                        local Width = 18 * Scale
                         
-                        -- Цвет по здоровью
-                        local health = humanoid.Health
-                        local maxHealth = humanoid.MaxHealth
-                        local healthPercent = health / maxHealth
+                        -- Health based color
+                        local Health = Humanoid.Health
+                        local MaxHealth = Humanoid.MaxHealth
+                        local HealthPercent = Health / MaxHealth
                         
-                        local color = Color3.new(1, 1, 1)
-                        if healthPercent > 0.7 then
-                            color = Color3.new(0, 1, 0)
-                        elseif healthPercent > 0.3 then
-                            color = Color3.new(1, 1, 0)
-                        else
-                            color = Color3.new(1, 0, 0)
+                        local Color = Color3.fromRGB(0, 255, 255) -- UNX Cyan
+                        if HealthPercent < 0.3 then
+                            Color = Color3.fromRGB(255, 0, 0)
+                        elseif HealthPercent < 0.6 then
+                            Color = Color3.fromRGB(255, 255, 0)
                         end
                         
-                        -- Обновляем ESP
-                        esp.Box.Visible = Config.ESP.Enabled and Config.ESP.Boxes
-                        esp.Box.Color = color
-                        esp.Box.Position = Vector2.new(headPos.X - boxWidth/2, headPos.Y - boxHeight/2)
-                        esp.Box.Size = Vector2.new(boxWidth, boxHeight)
+                        local X = HeadPos.X - Width / 2
+                        local Y = HeadPos.Y - Height / 2
                         
-                        esp.Name.Visible = Config.ESP.Enabled and Config.ESP.Names
-                        esp.Name.Color = color
-                        esp.Name.Position = Vector2.new(headPos.X, headPos.Y - boxHeight/2 - 18)
-                        esp.Name.Text = player.Name
+                        -- Box
+                        ESP.Box.Visible = Config.ESP.Enabled and Config.ESP.Box
+                        ESP.Box.Position = Vector2.new(X, Y)
+                        ESP.Box.Size = Vector2.new(Width, Height)
+                        ESP.Box.Color = Color
                         
-                        esp.Health.Visible = Config.ESP.Enabled and Config.ESP.Health
-                        esp.Health.Color = color
-                        esp.Health.Position = Vector2.new(headPos.X, headPos.Y + boxHeight/2 + 2)
-                        esp.Health.Text = math.floor(health)
+                        -- Name
+                        ESP.Name.Visible = Config.ESP.Enabled and Config.ESP.Name
+                        ESP.Name.Position = Vector2.new(HeadPos.X, Y - 18)
+                        ESP.Name.Text = Player.Name
                         
-                        esp.Distance.Visible = Config.ESP.Enabled and Config.ESP.Distance
-                        esp.Distance.Color = color
-                        esp.Distance.Position = Vector2.new(headPos.X, headPos.Y + boxHeight/2 + 16)
-                        esp.Distance.Text = math.floor(distance) .. "m"
+                        -- Health
+                        ESP.Health.Visible = Config.ESP.Enabled and Config.ESP.Health
+                        ESP.Health.Color = Color
+                        ESP.Health.Position = Vector2.new(HeadPos.X, Y + Height + 3)
+                        ESP.Health.Text = "HP: " .. math.floor(Health)
+                        
+                        -- Distance
+                        ESP.Distance.Visible = Config.ESP.Enabled and Config.ESP.Distance
+                        ESP.Distance.Color = Color
+                        ESP.Distance.Position = Vector2.new(HeadPos.X, Y + Height + 18)
+                        ESP.Distance.Text = math.floor(Distance) .. "m"
+                        
+                        -- Weapon
+                        ESP.Weapon.Visible = Config.ESP.Enabled and Config.ESP.Weapon
+                        ESP.Weapon.Position = Vector2.new(HeadPos.X, Y + Height + 33)
+                        ESP.Weapon.Text = GetWeapon(Player)
+                        
+                        -- Health Bar
+                        if Config.ESP.HealthBar then
+                            local BarWidth = Width
+                            local BarHeight = 3
+                            local BarX = X
+                            local BarY = Y - 6
+                            
+                            ESP.HealthBarBg.Visible = true
+                            ESP.HealthBarBg.Position = Vector2.new(BarX, BarY)
+                            ESP.HealthBarBg.Size = Vector2.new(BarWidth, BarHeight)
+                            
+                            ESP.HealthBar.Visible = true
+                            ESP.HealthBar.Color = Color
+                            ESP.HealthBar.Position = Vector2.new(BarX, BarY)
+                            ESP.HealthBar.Size = Vector2.new(BarWidth * HealthPercent, BarHeight)
+                        else
+                            ESP.HealthBarBg.Visible = false
+                            ESP.HealthBar.Visible = false
+                        end
+                        
                     else
-                        for _, drawing in pairs(esp) do
-                            drawing.Visible = false
+                        for _, Drawing in pairs(ESP) do
+                            Drawing.Visible = false
                         end
                     end
                 else
-                    for _, drawing in pairs(esp) do
-                        drawing.Visible = false
+                    for _, Drawing in pairs(ESP) do
+                        Drawing.Visible = false
                     end
                 end
             else
-                for _, drawing in pairs(esp) do
-                    drawing.Visible = false
+                for _, Drawing in pairs(ESP) do
+                    Drawing.Visible = false
                 end
             end
         end
     end)
     
-    -- Инициализация ESP для игроков
-    for _, player in pairs(players:GetPlayers()) do
-        if player ~= localPlayer then
-            createESP(player)
+    for _, Player in pairs(Players:GetPlayers()) do
+        if Player ~= LocalPlayer then
+            CreateESP(Player)
         end
     end
     
-    players.PlayerAdded:Connect(createESP)
-    players.PlayerRemoving:Connect(function(player)
-        if espObjects[player] then
-            for _, drawing in pairs(espObjects[player]) do
-                drawing:Remove()
+    Players.PlayerAdded:Connect(CreateESP)
+    Players.PlayerRemoving:Connect(function(Player)
+        if ESPObjects[Player] then
+            for _, Drawing in pairs(ESPObjects[Player]) do
+                Drawing:Remove()
             end
-            espObjects[player] = nil
+            ESPObjects[Player] = nil
         end
     end)
 end
 
--- === РАБОЧИЙ AIMBOT ДЛЯ FPS FLICK ===
+-- UNX Style AimBot for FPS Flick
 local function InitializeAimBot()
-    local players = game:GetService("Players")
-    local localPlayer = players.LocalPlayer
-    local camera = workspace.CurrentCamera
-    local UIS = game:GetService("UserInputService")
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+    local Camera = workspace.CurrentCamera
     local RunService = game:GetService("RunService")
+    local UIS = game:GetService("UserInputService")
     
-    -- FOV круг
-    local fovCircle = Drawing.new("Circle")
-    fovCircle.Visible = false
-    fovCircle.Color = Color3.new(1, 1, 1)
-    fovCircle.Thickness = 2
-    fovCircle.Filled = false
-    fovCircle.NumSides = 32
+    -- UNX Style Visuals
+    local FOVCircle = Drawing.new("Circle")
+    FOVCircle.Visible = Config.AimBot.ShowFOV
+    FOVCircle.Color = Color3.fromRGB(0, 255, 255)
+    FOVCircle.Thickness = 2
+    FOVCircle.Filled = false
+    FOVCircle.NumSides = 64
     
-    local function findClosestTarget()
-        local closestTarget = nil
-        local closestDistance = Config.Combat.AimFOV
-        local mousePos = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+    local Crosshair = Drawing.new("Circle")
+    Crosshair.Visible = Config.Visuals.Crosshair
+    Crosshair.Color = Color3.fromRGB(0, 255, 255)
+    Crosshair.Thickness = 2
+    Crosshair.Filled = false
+    Crosshair.Radius = 4
+    
+    local function FindTarget()
+        local BestTarget = nil
+        local ClosestDistance = Config.AimBot.FOV
+        local MousePos = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
         
-        for _, player in pairs(players:GetPlayers()) do
-            if player ~= localPlayer and player.Character then
-                local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-                local head = player.Character:FindFirstChild("Head")
+        for _, Player in pairs(Players:GetPlayers()) do
+            if Player ~= LocalPlayer and Player.Character then
+                local Humanoid = Player.Character:FindFirstChildOfClass("Humanoid")
+                local Part = Player.Character:FindFirstChild(Config.AimBot.Part)
                 
-                if humanoid and humanoid.Health > 0 and head then
-                    local screenPos, onScreen = camera:WorldToViewportPoint(head.Position)
+                if Humanoid and Humanoid.Health > 0 and Part then
+                    local ScreenPos, OnScreen = Camera:WorldToViewportPoint(Part.Position)
                     
-                    if onScreen then
-                        local distance = (mousePos - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
+                    if OnScreen then
+                        local Distance = (MousePos - Vector2.new(ScreenPos.X, ScreenPos.Y)).Magnitude
                         
-                        if distance < closestDistance then
-                            closestDistance = distance
-                            closestTarget = head
+                        if Distance < ClosestDistance then
+                            ClosestDistance = Distance
+                            BestTarget = Part
                         end
                     end
                 end
             end
         end
         
-        return closestTarget
+        return BestTarget
     end
     
     RunService.RenderStepped:Connect(function()
-        -- Обновляем FOV круг
-        fovCircle.Visible = Config.Combat.AimBot
-        fovCircle.Radius = Config.Combat.AimFOV
-        fovCircle.Position = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+        -- Update visuals
+        FOVCircle.Visible = Config.AimBot.ShowFOV
+        FOVCircle.Radius = Config.AimBot.FOV
+        FOVCircle.Position = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
         
-        -- AimBot логика
-        if Config.Combat.AimBot and UIS:IsMouseButtonPressed(Enum.UserInputType[Config.Combat.AimKey]) then
-            local target = findClosestTarget()
-            if target then
-                local screenPos = camera:WorldToViewportPoint(target.Position)
-                local targetPos = Vector2.new(screenPos.X, screenPos.Y)
-                local mousePos = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+        Crosshair.Visible = Config.Visuals.Crosshair
+        Crosshair.Position = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+        
+        -- AimBot logic
+        if Config.AimBot.Enabled and UIS:IsMouseButtonPressed(Enum.UserInputType[Config.AimBot.Key]) then
+            local Target = FindTarget()
+            
+            if Target then
+                local ScreenPos = Camera:WorldToViewportPoint(Target.Position)
                 
-                local delta = (targetPos - mousePos) * Config.Combat.AimSmoothness
+                -- Prediction for FPS Flick
+                local Root = Target.Parent:FindFirstChild("HumanoidRootPart")
+                if Root and Config.AimBot.Prediction > 0 then
+                    local Velocity = Root.Velocity
+                    ScreenPos = Camera:WorldToViewportPoint(Target.Position + (Velocity * Config.AimBot.Prediction))
+                end
                 
-                -- Плавное перемещение мыши
-                mousemoverel(delta.X, delta.Y)
-            end
-        end
-    end)
-end
-
--- === РАБОЧИЕ ФУНКЦИИ ДВИЖЕНИЯ ===
-local function SpeedHack()
-    local player = game:GetService("Players").LocalPlayer
-    local RunService = game:GetService("RunService")
-    
-    RunService.Heartbeat:Connect(function()
-        if player.Character then
-            local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-            if humanoid then
-                if Config.Movement.Speed then
-                    humanoid.WalkSpeed = Config.Movement.SpeedValue
-                else
-                    humanoid.WalkSpeed = 16
+                local TargetPos = Vector2.new(ScreenPos.X, ScreenPos.Y)
+                local MousePos = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+                
+                local Delta = (TargetPos - MousePos) * Config.AimBot.Smoothness
+                mousemoverel(Delta.X, Delta.Y)
+                
+                -- Auto shoot for FPS Flick
+                if Config.AimBot.AutoShoot then
+                    mouse1press()
+                    wait(0.05)
+                    mouse1release()
                 end
             end
         end
     end)
 end
 
--- Bunny Hop (как зайчик)
-local function BunnyHop()
-    local player = game:GetService("Players").LocalPlayer
-    local RunService = game:GetService("RunService")
-    
-    RunService.Heartbeat:Connect(function()
-        if Config.Movement.Bhop and player.Character then
-            local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-            if humanoid and humanoid.FloorMaterial ~= Enum.Material.Air then
-                -- Автоматический прыжок при касании земли
-                humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-            end
-        end
-    end)
-end
-
-local function HighJump()
-    local player = game:GetService("Players").LocalPlayer
-    local RunService = game:GetService("RunService")
-    
-    RunService.Heartbeat:Connect(function()
-        if player.Character then
-            local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-            if humanoid then
-                humanoid.JumpPower = Config.Movement.JumpPower
-            end
-        end
-    end)
-end
-
--- === ВИЗУАЛЬНЫЕ ФУНКЦИИ ===
-local function VisualEnhancements()
+-- UNX Style Visuals
+local function InitializeVisuals()
     local RunService = game:GetService("RunService")
     
     RunService.Heartbeat:Connect(function()
@@ -324,166 +422,148 @@ local function VisualEnhancements()
     end)
 end
 
-local function ClockAndFPS()
-    local clockText = Drawing.new("Text")
-    clockText.Size = 16
-    clockText.Outline = true
-    clockText.Color = Color3.new(1, 1, 1)
-    
-    local fpsText = Drawing.new("Text")
-    fpsText.Size = 16
-    fpsText.Outline = true
-    fpsText.Color = Color3.new(1, 1, 1)
-    
-    local frameCount = 0
-    local lastTime = tick()
+-- Movement for FPS Flick
+local function InitializeMovement()
+    local Player = game:GetService("Players").LocalPlayer
     local RunService = game:GetService("RunService")
+    local UIS = game:GetService("UserInputService")
     
-    RunService.RenderStepped:Connect(function()
-        frameCount = frameCount + 1
-        local currentTime = tick()
-        
-        if currentTime - lastTime >= 1 then
-            local fps = math.floor(frameCount / (currentTime - lastTime))
-            frameCount = 0
-            lastTime = currentTime
-            
-            fpsText.Visible = Config.Misc.FPS
-            fpsText.Text = "FPS: " .. fps
-            fpsText.Position = Vector2.new(10, 30)
+    RunService.Heartbeat:Connect(function()
+        if Player.Character then
+            local Humanoid = Player.Character:FindFirstChildOfClass("Humanoid")
+            if Humanoid then
+                -- Speed
+                if Config.Movement.Speed then
+                    Humanoid.WalkSpeed = Config.Movement.SpeedValue
+                else
+                    Humanoid.WalkSpeed = 16
+                end
+                
+                -- Bunny Hop for FPS Flick
+                if Config.Movement.Bhop and Humanoid.FloorMaterial ~= Enum.Material.Air then
+                    if UIS:IsKeyDown(Enum.KeyCode.W) or UIS:IsKeyDown(Enum.KeyCode.A) or 
+                       UIS:IsKeyDown(Enum.KeyCode.S) or UIS:IsKeyDown(Enum.KeyCode.D) then
+                        Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                    end
+                end
+            end
         end
-        
-        clockText.Visible = Config.Misc.Clock
-        clockText.Text = "Time: " .. os.date("%H:%M:%S")
-        clockText.Position = Vector2.new(10, 10)
     end)
 end
 
--- === ИНТЕРФЕЙС С КНОПКАМИ ЗНАЧЕНИЙ ===
-local function CreateUI()
-    local mainGui = Instance.new("ScreenGui")
-    mainGui.Name = "AgaloCheatUI"
-    mainGui.Parent = game:GetService("CoreGui")
-    mainGui.Enabled = false
+-- UNX Style Interface
+local function CreateUNXInterface()
+    local MainGui = Instance.new("ScreenGui")
+    MainGui.Name = "UNXInterface"
+    MainGui.Parent = game:GetService("CoreGui")
+    MainGui.Enabled = false
     
-    local mainFrame = Instance.new("Frame")
-    mainFrame.Size = UDim2.new(0, 320, 0, 450)
-    mainFrame.Position = UDim2.new(0, 80, 0.5, -225)
-    mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
-    mainFrame.BorderSizePixel = 0
-    mainFrame.Active = true
-    mainFrame.Draggable = true
-    mainFrame.ClipsDescendants = true
-    mainFrame.Parent = mainGui
+    local MainFrame = Instance.new("Frame")
+    MainFrame.Size = UDim2.new(0, 300, 0, 400)
+    MainFrame.Position = UDim2.new(0, 80, 0.5, -200)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+    MainFrame.BorderSizePixel = 0
+    MainFrame.Active = true
+    MainFrame.Draggable = true
+    MainFrame.ClipsDescendants = true
+    MainFrame.Parent = MainGui
     
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 8)
-    corner.Parent = mainFrame
+    local Corner = Instance.new("UICorner")
+    Corner.CornerRadius = UDim.new(0, 8)
+    Corner.Parent = MainFrame
     
-    -- Заголовок
-    local header = Instance.new("Frame")
-    header.Size = UDim2.new(1, 0, 0, 35)
-    header.BackgroundColor3 = Color3.fromRGB(0, 150, 255)
-    header.BorderSizePixel = 0
-    header.Parent = mainFrame
+    -- UNX Header
+    local Header = Instance.new("Frame")
+    Header.Size = UDim2.new(1, 0, 0, 40)
+    Header.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+    Header.BorderSizePixel = 0
+    Header.Parent = MainFrame
     
-    local headerCorner = Instance.new("UICorner")
-    headerCorner.CornerRadius = UDim.new(0, 8)
-    headerCorner.Parent = header
+    local HeaderCorner = Instance.new("UICorner")
+    HeaderCorner.CornerRadius = UDim.new(0, 8)
+    HeaderCorner.Parent = Header
     
-    local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, -70, 1, 0)
-    title.BackgroundTransparency = 1
-    title.Text = "AgaloCheat v3.0"
-    title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    title.TextSize = 14
-    title.Font = Enum.Font.GothamBold
-    title.TextXAlignment = Enum.TextXAlignment.Left
-    title.Position = UDim2.new(0, 15, 0, 0)
-    title.Parent = header
+    local Title = Instance.new("TextLabel")
+    Title.Size = UDim2.new(1, -70, 1, 0)
+    Title.BackgroundTransparency = 1
+    Title.Text = "UNX FPS FLICK"
+    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Title.TextSize = 16
+    Title.Font = Enum.Font.GothamBold
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+    Title.Position = UDim2.new(0, 15, 0, 0)
+    Title.Parent = Header
     
-    local closeBtn = Instance.new("TextButton")
-    closeBtn.Size = UDim2.new(0, 30, 0, 30)
-    closeBtn.Position = UDim2.new(1, -35, 0, 2)
-    closeBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
-    closeBtn.Text = "×"
-    closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    closeBtn.TextSize = 18
-    closeBtn.BorderSizePixel = 0
-    closeBtn.Parent = header
+    local CloseBtn = Instance.new("TextButton")
+    CloseBtn.Size = UDim2.new(0, 30, 0, 30)
+    CloseBtn.Position = UDim2.new(1, -35, 0, 5)
+    CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+    CloseBtn.Text = "✕"
+    CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CloseBtn.TextSize = 18
+    CloseBtn.BorderSizePixel = 0
+    CloseBtn.Parent = Header
     
-    local closeCorner = Instance.new("UICorner")
-    closeCorner.CornerRadius = UDim.new(0, 6)
-    closeCorner.Parent = closeBtn
+    local CloseCorner = Instance.new("UICorner")
+    CloseCorner.CornerRadius = UDim.new(0, 6)
+    CloseCorner.Parent = CloseBtn
     
-    -- Вкладки
-    local tabs = {"ESP", "Movement", "Combat", "Visuals"}
-    local currentTab = "ESP"
+    -- Content
+    local Content = Instance.new("ScrollingFrame")
+    Content.Size = UDim2.new(1, 0, 1, -40)
+    Content.Position = UDim2.new(0, 0, 0, 40)
+    Content.BackgroundTransparency = 1
+    Content.BorderSizePixel = 0
+    Content.ScrollBarThickness = 6
+    Content.CanvasSize = UDim2.new(0, 0, 0, 500)
+    Content.Parent = MainFrame
     
-    local tabContainer = Instance.new("Frame")
-    tabContainer.Size = UDim2.new(1, 0, 0, 35)
-    tabContainer.Position = UDim2.new(0, 0, 0, 35)
-    tabContainer.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-    tabContainer.BorderSizePixel = 0
-    tabContainer.Parent = mainFrame
-    
-    -- Контент
-    local contentFrame = Instance.new("ScrollingFrame")
-    contentFrame.Size = UDim2.new(1, 0, 1, -70)
-    contentFrame.Position = UDim2.new(0, 0, 0, 70)
-    contentFrame.BackgroundTransparency = 1
-    contentFrame.BorderSizePixel = 0
-    contentFrame.ScrollBarThickness = 4
-    contentFrame.CanvasSize = UDim2.new(0, 0, 0, 600)
-    contentFrame.Parent = mainFrame
-    
-    -- Функция создания переключателя
-    local function CreateToggle(parent, name, configCategory, configKey, yPosition)
-        local toggleFrame = Instance.new("Frame")
-        toggleFrame.Size = UDim2.new(1, -20, 0, 30)
-        toggleFrame.Position = UDim2.new(0, 10, 0, yPosition)
-        toggleFrame.BackgroundTransparency = 1
-        toggleFrame.Parent = parent
+    local function CreateToggle(Parent, Name, Category, Key, YPos)
+        local ToggleFrame = Instance.new("Frame")
+        ToggleFrame.Size = UDim2.new(1, -20, 0, 30)
+        ToggleFrame.Position = UDim2.new(0, 10, 0, YPos)
+        ToggleFrame.BackgroundTransparency = 1
+        ToggleFrame.Parent = Parent
         
-        local label = Instance.new("TextLabel")
-        label.Size = UDim2.new(0.7, 0, 1, 0)
-        label.BackgroundTransparency = 1
-        label.Text = name
-        label.TextColor3 = Color3.fromRGB(220, 220, 220)
-        label.TextSize = 13
-        label.Font = Enum.Font.Gotham
-        label.TextXAlignment = Enum.TextXAlignment.Left
-        label.Parent = toggleFrame
+        local Label = Instance.new("TextLabel")
+        Label.Size = UDim2.new(0.7, 0, 1, 0)
+        Label.BackgroundTransparency = 1
+        Label.Text = Name
+        Label.TextColor3 = Color3.fromRGB(0, 255, 255)
+        Label.TextSize = 13
+        Label.Font = Enum.Font.Gotham
+        Label.TextXAlignment = Enum.TextXAlignment.Left
+        Label.Parent = ToggleFrame
         
-        local toggle = Instance.new("TextButton")
-        toggle.Size = UDim2.new(0, 45, 0, 22)
-        toggle.Position = UDim2.new(0.7, 0, 0.5, -11)
-        toggle.BackgroundColor3 = Config[configCategory][configKey] and Color3.fromRGB(0, 200, 80) or Color3.fromRGB(70, 70, 80)
-        toggle.Text = ""
-        toggle.BorderSizePixel = 0
-        toggle.Parent = toggleFrame
+        local Toggle = Instance.new("TextButton")
+        Toggle.Size = UDim2.new(0, 45, 0, 22)
+        Toggle.Position = UDim2.new(0.7, 0, 0.5, -11)
+        Toggle.BackgroundColor3 = Config[Category][Key] and Color3.fromRGB(0, 255, 255) or Color3.fromRGB(50, 50, 60)
+        Toggle.Text = ""
+        Toggle.BorderSizePixel = 0
+        Toggle.Parent = ToggleFrame
         
-        local toggleCorner = Instance.new("UICorner")
-        toggleCorner.CornerRadius = UDim.new(0, 11)
-        toggleCorner.Parent = toggle
+        local ToggleCorner = Instance.new("UICorner")
+        ToggleCorner.CornerRadius = UDim.new(0, 11)
+        ToggleCorner.Parent = Toggle
         
-        local toggleIndicator = Instance.new("Frame")
-        toggleIndicator.Size = UDim2.new(0, 18, 0, 18)
-        toggleIndicator.Position = UDim2.new(0, Config[configCategory][configKey] and 25 or 2, 0.5, -9)
-        toggleIndicator.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-        toggleIndicator.BorderSizePixel = 0
-        toggleIndicator.Parent = toggle
+        local Indicator = Instance.new("Frame")
+        Indicator.Size = UDim2.new(0, 18, 0, 18)
+        Indicator.Position = UDim2.new(0, Config[Category][Key] and 25 or 2, 0.5, -9)
+        Indicator.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        Indicator.BorderSizePixel = 0
+        Indicator.Parent = Toggle
         
-        local indicatorCorner = Instance.new("UICorner")
-        indicatorCorner.CornerRadius = UDim.new(1, 0)
-        indicatorCorner.Parent = toggleIndicator
+        local IndicatorCorner = Instance.new("UICorner")
+        IndicatorCorner.CornerRadius = UDim.new(1, 0)
+        IndicatorCorner.Parent = Indicator
         
-        toggle.MouseButton1Click:Connect(function()
-            Config[configCategory][configKey] = not Config[configCategory][configKey]
-            toggle.BackgroundColor3 = Config[configCategory][configKey] and Color3.fromRGB(0, 200, 80) or Color3.fromRGB(70, 70, 80)
+        Toggle.MouseButton1Click:Connect(function()
+            Config[Category][Key] = not Config[Category][Key]
+            Toggle.BackgroundColor3 = Config[Category][Key] and Color3.fromRGB(0, 255, 255) or Color3.fromRGB(50, 50, 60)
             
-            toggleIndicator:TweenPosition(
-                UDim2.new(0, Config[configCategory][configKey] and 25 or 2, 0.5, -9),
+            Indicator:TweenPosition(
+                UDim2.new(0, Config[Category][Key] and 25 or 2, 0.5, -9),
                 Enum.EasingDirection.Out,
                 Enum.EasingStyle.Quad,
                 0.15,
@@ -491,166 +571,99 @@ local function CreateUI()
             )
         end)
         
-        return toggleFrame
+        return ToggleFrame
     end
     
-    -- Функция создания кнопок значений
-    local function CreateValueButtons(parent, name, configCategory, configKey, values, yPosition)
-        local valueFrame = Instance.new("Frame")
-        valueFrame.Size = UDim2.new(1, -20, 0, 45)
-        valueFrame.Position = UDim2.new(0, 10, 0, yPosition)
-        valueFrame.BackgroundTransparency = 1
-        valueFrame.Parent = parent
-        
-        local label = Instance.new("TextLabel")
-        label.Size = UDim2.new(1, 0, 0, 20)
-        label.BackgroundTransparency = 1
-        label.Text = name
-        label.TextColor3 = Color3.fromRGB(220, 220, 220)
-        label.TextSize = 13
-        label.Font = Enum.Font.Gotham
-        label.TextXAlignment = Enum.TextXAlignment.Left
-        label.Parent = valueFrame
-        
-        local buttonContainer = Instance.new("Frame")
-        buttonContainer.Size = UDim2.new(1, 0, 0, 25)
-        buttonContainer.Position = UDim2.new(0, 0, 0, 20)
-        buttonContainer.BackgroundTransparency = 1
-        buttonContainer.Parent = valueFrame
-        
-        for i, value in ipairs(values) do
-            local valueButton = Instance.new("TextButton")
-            valueButton.Size = UDim2.new(1 / #values, -2, 1, 0)
-            valueButton.Position = UDim2.new((i-1) / #values, 0, 0, 0)
-            valueButton.BackgroundColor3 = Config[configCategory][configKey] == value and Color3.fromRGB(0, 150, 255) or Color3.fromRGB(50, 50, 60)
-            valueButton.Text = tostring(value)
-            valueButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-            valueButton.TextSize = 11
-            valueButton.BorderSizePixel = 0
-            valueButton.Parent = buttonContainer
-            
-            local buttonCorner = Instance.new("UICorner")
-            buttonCorner.CornerRadius = UDim.new(0, 4)
-            buttonCorner.Parent = valueButton
-            
-            valueButton.MouseButton1Click:Connect(function()
-                Config[configCategory][configKey] = value
-                
-                -- Обновляем цвета всех кнопок
-                for _, btn in ipairs(buttonContainer:GetChildren()) do
-                    if btn:IsA("TextButton") then
-                        btn.BackgroundColor3 = btn.Text == tostring(value) and Color3.fromRGB(0, 150, 255) or Color3.fromRGB(50, 50, 60)
-                    end
-                end
-            end)
-        end
-        
-        return valueFrame
-    end
+    local YPos = 15
     
-    -- Функция обновления контента вкладки
-    local function UpdateTabContent(tabName)
-        for _, child in ipairs(contentFrame:GetChildren()) do
-            if child:IsA("Frame") then
-                child:Destroy()
-            end
-        end
-        
-        local yPosition = 15
-        
-        if tabName == "ESP" then
-            CreateToggle(contentFrame, "ESP Enabled", "ESP", "Enabled", yPosition); yPosition = yPosition + 35
-            CreateToggle(contentFrame, "Boxes", "ESP", "Boxes", yPosition); yPosition = yPosition + 35
-            CreateToggle(contentFrame, "Names", "ESP", "Names", yPosition); yPosition = yPosition + 35
-            CreateToggle(contentFrame, "Health", "ESP", "Health", yPosition); yPosition = yPosition + 35
-            CreateToggle(contentFrame, "Distance", "ESP", "Distance", yPosition); yPosition = yPosition + 35
-            
-        elseif tabName == "Movement" then
-            CreateToggle(contentFrame, "Speed Hack", "Movement", "Speed", yPosition); yPosition = yPosition + 35
-            CreateValueButtons(contentFrame, "Speed Value", "Movement", "SpeedValue", {20, 25, 30, 40, 50}, yPosition); yPosition = yPosition + 50
-            CreateToggle(contentFrame, "Bunny Hop", "Movement", "Bhop", yPosition); yPosition = yPosition + 35
-            CreateValueButtons(contentFrame, "Jump Power", "Movement", "JumpPower", {50, 75, 100, 125, 150}, yPosition); yPosition = yPosition + 50
-            
-        elseif tabName == "Combat" then
-            CreateToggle(contentFrame, "AimBot", "Combat", "AimBot", yPosition); yPosition = yPosition + 35
-            CreateValueButtons(contentFrame, "Aim FOV", "Combat", "AimFOV", {30, 50, 70, 90}, yPosition); yPosition = yPosition + 50
-            CreateValueButtons(contentFrame, "Aim Smoothness", "Combat", "AimSmoothness", {0.3, 0.4, 0.5, 0.6}, yPosition); yPosition = yPosition + 50
-            
-        elseif tabName == "Visuals" then
-            CreateToggle(contentFrame, "No Fog", "Visuals", "NoFog", yPosition); yPosition = yPosition + 35
-            CreateToggle(contentFrame, "Full Bright", "Visuals", "FullBright", yPosition); yPosition = yPosition + 35
-            CreateToggle(contentFrame, "Show Clock", "Misc", "Clock", yPosition); yPosition = yPosition + 35
-            CreateToggle(contentFrame, "Show FPS", "Misc", "FPS", yPosition); yPosition = yPosition + 35
-        end
-    end
+    -- AimBot Section
+    CreateToggle(Content, "🎯 AimBot", "AimBot", "Enabled", YPos); YPos = YPos + 35
+    CreateToggle(Content, "👁️ Show FOV", "AimBot", "ShowFOV", YPos); YPos = YPos + 35
+    CreateToggle(Content, "🔫 Auto Shoot", "AimBot", "AutoShoot", YPos); YPos = YPos + 35
     
-    -- Создание вкладок
-    for i, tabName in ipairs(tabs) do
-        local tabButton = Instance.new("TextButton")
-        tabButton.Size = UDim2.new(1 / #tabs, 0, 1, 0)
-        tabButton.Position = UDim2.new((i-1) / #tabs, 0, 0, 0)
-        tabButton.BackgroundColor3 = tabName == currentTab and Color3.fromRGB(0, 150, 255) or Color3.fromRGB(40, 40, 50)
-        tabButton.Text = tabName
-        tabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-        tabButton.TextSize = 11
-        tabButton.Font = Enum.Font.GothamBold
-        tabButton.BorderSizePixel = 0
-        tabButton.Parent = tabContainer
-        
-        tabButton.MouseButton1Click:Connect(function()
-            currentTab = tabName
-            for _, btn in ipairs(tabContainer:GetChildren()) do
-                if btn:IsA("TextButton") then
-                    btn.BackgroundColor3 = btn.Text == currentTab and Color3.fromRGB(0, 150, 255) or Color3.fromRGB(40, 40, 50)
-                end
-            end
-            UpdateTabContent(currentTab)
-        end)
-    end
+    -- ESP Section
+    CreateToggle(Content, "📱 ESP", "ESP", "Enabled", YPos); YPos = YPos + 35
+    CreateToggle(Content, "🟦 Box", "ESP", "Box", YPos); YPos = YPos + 35
+    CreateToggle(Content, "👤 Name", "ESP", "Name", YPos); YPos = YPos + 35
+    CreateToggle(Content, "❤️ Health", "ESP", "Health", YPos); YPos = YPos + 35
+    CreateToggle(Content, "📏 Distance", "ESP", "Distance", YPos); YPos = YPos + 35
+    CreateToggle(Content, "🔫 Weapon", "ESP", "Weapon", YPos); YPos = YPos + 35
+    CreateToggle(Content, "📊 Health Bar", "ESP", "HealthBar", YPos); YPos = YPos + 35
     
-    -- Обработчики кнопок
-    closeBtn.MouseButton1Click:Connect(function()
-        mainGui.Enabled = false
+    -- Visuals Section
+    CreateToggle(Content, "🌫️ No Fog", "Visuals", "NoFog", YPos); YPos = YPos + 35
+    CreateToggle(Content, "💡 Full Bright", "Visuals", "FullBright", YPos); YPos = YPos + 35
+    CreateToggle(Content, "🎯 Crosshair", "Visuals", "Crosshair", YPos); YPos = YPos + 35
+    
+    -- Movement Section
+    CreateToggle(Content, "🏃 Speed", "Movement", "Speed", YPos); YPos = YPos + 35
+    CreateToggle(Content, "🐇 Bunny Hop", "Movement", "Bhop", YPos); YPos = YPos + 35
+    
+    CloseBtn.MouseButton1Click:Connect(function()
+        MainGui.Enabled = false
     end)
     
-    -- Инициализация первой вкладки
-    UpdateTabContent(currentTab)
-    
-    return mainGui
+    return MainGui
 end
 
--- === ОСНОВНАЯ ФУНКЦИЯ ===
+-- UNX Floating Button
+local function CreateUNXButton()
+    local ButtonGui = Instance.new("ScreenGui")
+    ButtonGui.Name = "UNXButton"
+    ButtonGui.Parent = game:GetService("CoreGui")
+    
+    local MainButton = Instance.new("TextButton")
+    MainButton.Size = UDim2.new(0, 60, 0, 60)
+    MainButton.Position = UDim2.new(0, 20, 0.5, -30)
+    MainButton.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+    MainButton.Text = "UNX"
+    MainButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    MainButton.TextSize = 14
+    MainButton.BorderSizePixel = 0
+    MainButton.ZIndex = 10
+    MainButton.Parent = ButtonGui
+    
+    local Corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = MainButton
+    
+    return ButtonGui, MainButton
+end
+
+-- Main UNX Function
 local function Main()
-    print("╔══════════════════════════════╗")
-    print("║      AgaloCheat v3.0         ║")
-    print("║   Optimized for FPS Flick    ║")
-    print("║     Created by: Kast13l      ║")
-    print("╚══════════════════════════════╝")
+    -- Show UNX Loader
+    UNXLoader()
     
-    -- Создаем плавающую кнопку
-    local floatingButtonGui, floatingButton = CreateFloatingButton()
-    local mainUI = CreateUI()
+    -- Wait for loader to finish
+    wait(5)
     
-    -- Обработчик плавающей кнопки
-    floatingButton.MouseButton1Click:Connect(function()
-        mainUI.Enabled = not mainUI.Enabled
+    -- Create interface
+    local UNXButton, MainButton = CreateUNXButton()
+    local UNXInterface = CreateUNXInterface()
+    
+    -- Button handler
+    MainButton.MouseButton1Click:Connect(function()
+        UNXInterface.Enabled = not UNXInterface.Enabled
     end)
     
-    -- Инициализация всех функций
+    -- Initialize features
     InitializeESP()
     InitializeAimBot()
-    SpeedHack()
-    BunnyHop()
-    HighJump()
-    VisualEnhancements()
-    ClockAndFPS()
+    InitializeVisuals()
+    InitializeMovement()
     
-    print("[Agalo] All features loaded successfully!")
-    print("[Agalo] Click the floating button to open menu")
-    print("[Agalo] Bunny Hop: Auto-jump like a rabbit!")
-    print("[Agalo] AimBot: Press RMB to activate")
-    print("[Agalo] ESP: Optimized for FPS Flick")
+    -- UNX Style print messages
+    print("╔══════════════════════════════╗")
+    print("║         UNX FPS FLICK        ║")
+    print("║        Cheat Loaded!         ║")
+    print("║     Optimized for FPS Flick  ║")
+    print("╚══════════════════════════════╝")
+    print("[UNX] 🎯 AimBot: Right Click to Activate")
+    print("[UNX] 📱 ESP: Full player information")
+    print("[UNX] 🏃 Movement: Speed & Bunny Hop")
+    print("[UNX] 👆 Click UNX button to open menu")
 end
 
--- Запуск
+-- Start UNX Cheat
 Main()
